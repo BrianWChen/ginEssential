@@ -3,7 +3,9 @@ package common
 import (
 	"brianwchen/ginessential/model"
 	"fmt"
+	"net/url"
 
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -12,19 +14,21 @@ var DB *gorm.DB
 
 func InitDB() *gorm.DB {
 	//driverName := "mysql"
-	host := "localhost"
-	port := "3306"
-	database := "ginessential"
-	username := "root"
-	password := "Password1"
-	charset := "utf8"
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
+	host := viper.GetString("datasource.host")
+	port := viper.GetString("datasource.port")
+	database := viper.GetString("datasource.database")
+	username := viper.GetString("datasource.username")
+	password := viper.GetString("datasource.password")
+	charset := viper.GetString("datasource.charset")
+	loc := viper.GetString("datasource.loc")
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",
 		username,
 		password,
 		host,
 		port,
 		database,
-		charset)
+		charset,
+		url.QueryEscape(loc))
 
 	//db, err := gorm.Open(sqlite.Open(driverName), args)
 	//dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
